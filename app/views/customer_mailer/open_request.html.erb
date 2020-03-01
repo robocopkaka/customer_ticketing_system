@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Hi, <%= @customer.name %></h1>
+<p>
+  We've received your request with id <%= link_to "##{@support_request.id}", support_request_url(@support_request.id) %>
+  and you'd be hearing back from us shortly
+</p>
+</body>
+</html>

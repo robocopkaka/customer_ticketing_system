@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_28_173013) do
+ActiveRecord::Schema.define(version: 2020_02_29_164220) do
+
+  create_table "support_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "subject", null: false
+    t.text "description", null: false
+    t.datetime "resolved_at"
+    t.integer "requester_id"
+    t.integer "assignee_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.column "status", "enum('opened','assigned','resolved')", default: "opened"
+  end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false

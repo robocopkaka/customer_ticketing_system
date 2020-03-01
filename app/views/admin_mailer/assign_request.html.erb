@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Hi, <%= @support_agent.name %></h1>
+<p>
+  You've just been assigned a request with id <%= link_to "##{@support_request_id}", support_request_url(@support_request_id) %>.
+  <br />
+  Attend to it and close when done
+</p>
+</body>
+</html>
