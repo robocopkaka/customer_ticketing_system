@@ -36,7 +36,7 @@ RSpec.describe AdminsController, type: :request do
   end
 
   describe "patch /support_requests/:id/assign" do
-    let(:params) { { assignee_id: support_agent.id } }
+    let(:params) { { assignee_id: support_agent.uid } }
 
     context "when a valid support agent id is passed" do
       before do

@@ -1,7 +1,7 @@
 class CustomersController < ApplicationController
   def create
     customer = Customer.create!(customer_params)
-    auth_token = Knock::AuthToken.new payload: { sub: customer.id }
+    auth_token = Knock::AuthToken.new payload: { sub: customer.uid }
     json_response(
       customer,
       { jwt: auth_token.token },

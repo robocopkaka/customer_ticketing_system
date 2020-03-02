@@ -15,12 +15,12 @@ class AdminsController < ApplicationController
   private
 
   def find_support_request
-    @support_request = SupportRequest.find_by!(id: params[:id])
+    @support_request = SupportRequest.find_by!(uid: params[:id])
   end
 
   # Prevents a request from being assigned to a customer.
   # Result doesn't need to be returned. Only the exception matters
   def verify_support_agent
-    SupportAgent.find_by!(id: params[:assignee_id])
+    SupportAgent.find_by!(uid: params[:assignee_id])
   end
 end

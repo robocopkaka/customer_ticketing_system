@@ -1,4 +1,5 @@
 class SupportAgentsController < ApplicationController
+  before_action :authenticate_admin, only: %i[index]
   def create
     support_agent = SupportAgent.create!(support_agent_params)
     json_response(
@@ -6,6 +7,10 @@ class SupportAgentsController < ApplicationController
       "Support agent created successfully",
       :created
     )
+  end
+
+  def index
+    json_response(SupportAgent.all, "")
   end
 
   private
