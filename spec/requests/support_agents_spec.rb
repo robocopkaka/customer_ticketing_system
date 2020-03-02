@@ -2,10 +2,15 @@ require "rails_helper"
 
 RSpec.describe SupportAgentsController do
   let(:support_agent) { FactoryBot.attributes_for :support_agent }
+  let(:admin) { FactoryBot.create :admin }
 
   describe "create" do
     context "when valid parameters are passed" do
-      before { post support_agents_path, params: support_agent }
+      before do
+        post support_agents_path,
+             params: support_agent,
+             headers: authenticated_headers(admin.uid)
+      end
 
       it "returns the created support_agent" do
         saved_support_agent = json["data"]["support_agent"]
@@ -17,9 +22,15 @@ RSpec.describe SupportAgentsController do
     end
 
     context "when email has already been taken" do
-      before { post support_agents_path, params: support_agent }
+      before do
+        post support_agents_path,
+             params: support_agent,
+             headers: authenticated_headers(admin.id)
+      end
       it "returns an error" do
-        post support_agents_path, params: support_agent
+        post support_agents_path,
+             params: support_agent,
+             headers: authenticated_headers(admin.id)
         errors = json["errors"].first
         expect(response).to have_http_status 422
         expect(errors["email"]).to include "has already been taken"
@@ -29,7 +40,9 @@ RSpec.describe SupportAgentsController do
     context "when name is not entered" do
       before do
         support_agent.delete(:name)
-        post support_agents_path, params: support_agent
+        post support_agents_path,
+             params: support_agent,
+             headers: authenticated_headers(admin.id)
       end
 
       it "returns an error" do
@@ -49,7 +62,11 @@ RSpec.describe SupportAgentsController do
         }
       }
     end
-    before { post support_agents_path, params: support_agent }
+    before do
+      post support_agents_path,
+           params: support_agent,
+           headers: authenticated_headers(admin.id)
+    end
 
     context "when valid login details are used" do
       it "logs in the user and returns a token" do
@@ -66,6 +83,26 @@ RSpec.describe SupportAgentsController do
       end
       it "returns an error" do
         expect(response).to have_http_status 404
+      end
+    end
+  end
+
+  describe "/support_agents" do
+    let!(:agents) { FactoryBot.create_list :support_agent, 5 }
+    context "when admin tries to access a list of support agents" do
+      before { get support_agents_path, headers: authenticated_headers(admin.id) }
+      it "returns a list of available support agents" do
+        support_agents = json["data"]["support_agents"]
+        expect(response).to have_http_status 200
+        expect(support_agents.count).to eq 5
+        expect(support_agents.first["name"]).to eq agents.first.name
+      end
+    end
+
+    context "when non admin tries to access a list of support agent" do
+      before { get support_agents_path }
+      it "returns an error" do
+        expect(response).to have_http_status 401
       end
     end
   end

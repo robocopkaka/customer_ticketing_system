@@ -24,6 +24,6 @@ class SupportRequestsController < ApplicationController
   end
 
   def find_support_request
-    @support_request = SupportRequest.find_by!(id: params[:id])
+    @support_request = SupportRequest.find_by!(uid: params[:id])
   end
 end

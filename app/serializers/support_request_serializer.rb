@@ -5,4 +5,7 @@ class SupportRequestSerializer < ActiveModel::Serializer
              :status,
              :requester_id,
              :assignee_id
+  def id
+    object.uid
+  end
 end

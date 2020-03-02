@@ -10,26 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_01_165619) do
+ActiveRecord::Schema.define(version: 2020_03_02_165508) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "body"
-    t.integer "commenter_id"
-    t.bigint "support_request_id", null: false
+    t.string "commenter_id"
+    t.string "support_request_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["support_request_id"], name: "index_comments_on_support_request_id"
+    t.string "uid"
   end
 
   create_table "support_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "subject", null: false
     t.text "description", null: false
     t.datetime "resolved_at"
-    t.integer "requester_id"
-    t.integer "assignee_id"
+    t.string "requester_id"
+    t.string "assignee_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.column "status", "enum('opened','assigned','resolved')", default: "opened"
+    t.string "uid", null: false
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -41,8 +42,8 @@ ActiveRecord::Schema.define(version: 2020_03_01_165619) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "password_digest"
+    t.string "uid", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "comments", "support_requests"
 end

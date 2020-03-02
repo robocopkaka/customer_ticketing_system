@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   private
 
   def find_request
-    @support_request = SupportRequest.find_by!(id: params[:support_request_id])
+    @support_request = SupportRequest.find_by!(uid: params[:support_request_id])
   end
 
   def customer_can_post
