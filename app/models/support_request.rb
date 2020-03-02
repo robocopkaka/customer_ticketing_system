@@ -10,6 +10,8 @@ class SupportRequest < ApplicationRecord
              foreign_key: 'assignee_id',
              optional: true
 
+  has_many :comments
+
   validates_presence_of :subject, :description
 
   enum status: {

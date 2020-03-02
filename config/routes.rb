@@ -4,8 +4,10 @@ Rails.application.routes.draw do
   resources :customers, only: %i[create]
   resources :support_agents, only: %i[create]
   resources :support_requests, only: %i[create show index] do
+    resources :comments, only: %i[create index]
     member do
       patch '/assign', to: "admins#assign"
+      # post '/comments', to: "comments#create"
     end
   end
   post "admins/login" => "admin_token#create"
