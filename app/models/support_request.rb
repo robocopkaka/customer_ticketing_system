@@ -16,6 +16,8 @@ class SupportRequest < ApplicationRecord
 
   default_scope { order(created_at: :asc) }
 
+  scope :open, -> { where(status: 'opened') }
+
   validates_presence_of :subject, :description
 
   enum status: {

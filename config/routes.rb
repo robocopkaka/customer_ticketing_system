@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  resources :customers, only: %i[create]
-  resources :support_agents, only: %i[create index]
+  resources :customers, only: %i[create] do
+    resources :support_requests, only: %i[index]
+  end
+  resources :support_agents, only: %i[create index] do
+    resources :support_requests, only: %i[index]
+  end
   resources :support_requests, only: %i[create show index] do
     resources :comments, only: %i[create index]
     member do
