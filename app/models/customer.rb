@@ -4,6 +4,15 @@ class Customer < User
 
   before_save :set_uid
 
+  # using counter cache might not work here since I want more granularity
+  def open_requests_count
+    support_requests.where("status = ? OR status = ?", 'opened', 'assigned').count
+  end
+
+  def resolved_requests_count
+    support_requests.where(status: 'resolved').count
+  end
+
   private
 
   def set_uid

@@ -25,4 +25,12 @@ class SupportRequestService
       ).assign_request.deliver_later
     @support_request
   end
+
+  def self.fetch_requests(resource, query="")
+    unless query.blank?
+      return resource.support_requests
+                           .where("status = ?", query)
+    end
+    resource.support_requests
+  end
 end

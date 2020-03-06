@@ -48,7 +48,7 @@ RSpec.describe AdminsController, type: :request do
       it "assigns the request to a support agent" do
         returned_request = json["data"]["support_request"]
         expect(response).to have_http_status 200
-        expect(returned_request["status"]).to eq "assigned"
+        expect(returned_request["status"]).to eq "Assigned"
         expect(returned_request["assignee_id"]).to eq support_agent.id
       end
 

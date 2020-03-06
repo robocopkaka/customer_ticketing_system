@@ -1,9 +1,9 @@
 module Response
-  def json_response(object, message, status=:ok)
+  def json_response(object, extra, status=:ok)
     object = ActiveModelSerializers::SerializableResource.new(object).as_json
     response = {
       data: object,
-      message: message
+      extra: extra
     }
     render json: response, status: status
   end

@@ -43,4 +43,33 @@ RSpec.describe SupportRequestService, type: :service do
       end
     end
   end
+
+  describe "self.fetch_request" do
+    let!(:assigned_requests)  { FactoryBot.create_list(:support_request, 5, assignee_id: support_agent.id, status: 'resolved') }
+    let!(:opened_requests)  { FactoryBot.create_list(:support_request, 5, assignee_id: support_agent.id, status: 'opened') }
+
+    context "when a query string is present" do
+      it "returns a matching result set" do
+        sp = SupportRequestService.fetch_requests(support_agent, "opened")
+        expect(sp.count).to eq 5
+        statuses = sp.pluck(:status).uniq
+        expect(statuses.count).to eq 1
+        expect(statuses).to include "opened"
+      end
+    end
+
+    context "when a query string is not present" do
+      it "returns a matching result set" do
+        sp = SupportRequestService.fetch_requests(support_agent)
+        expect(sp.count).to eq 10
+      end
+    end
+
+    context "when an invalid status is passed as a query" do
+      it "returns an empty result set" do
+        sp = SupportRequestService.fetch_requests(support_agent, "weird")
+        expect(sp.count).to eq 0
+      end
+    end
+  end
 end
