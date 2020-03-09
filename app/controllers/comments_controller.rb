@@ -16,6 +16,7 @@ class CommentsController < ApplicationController
     json_response(comments, "")
   end
 
+
   private
 
   def find_request
