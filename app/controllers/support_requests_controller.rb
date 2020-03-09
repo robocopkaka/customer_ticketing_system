@@ -32,6 +32,11 @@ class SupportRequestsController < ApplicationController
     json_response(@support_request, "")
   end
 
+  def export_as_csv
+    support_requests = SupportRequest.where("resolved_at > ?", Time.now - 1.month)
+    sps = support_requests.to_csv
+  end
+
   private
 
   def support_request_params

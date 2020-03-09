@@ -28,6 +28,15 @@ class SupportRequest < ApplicationRecord
 
   before_create :set_uid
 
+  def self.to_csv
+    CSV.generate  do |csv|
+      csv << column_names
+      all.each do |result|
+        csv << result.attributes.values_at(*column_names)
+      end
+    end
+  end
+
   private
   def set_uid
     self.uid = "request-#{SecureRandom.hex}"
