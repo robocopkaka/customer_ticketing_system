@@ -19,7 +19,7 @@ class Comment < ApplicationRecord
 
   scope :order_asc, -> { order('created_at asc') }
 
-  before_save :set_uid
+  before_create :set_uid
 
   validates_presence_of :body
 

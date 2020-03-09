@@ -169,17 +169,5 @@ RSpec.describe SupportRequestsController, type: :request do
         expect(returned_request["resolved_at"]).to_not be nil
       end
     end
-
-    context "when the request belongs to a different agent" do
-      let(:new_agent) { FactoryBot.create(:support_agent) }
-      before do
-        created_request.update(assignee_id: support_agent.id)
-        patch resolve_support_request_path(created_request.id),
-              headers: authenticated_headers(new_agent.id)
-      end
-      it "returns an error" do
-        binding.pry
-      end
-    end
   end
 end

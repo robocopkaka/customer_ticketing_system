@@ -36,7 +36,7 @@ RSpec.describe CommentsController, type: :request do
           comment = json["data"]["comment"]
           expect(response).to have_http_status 201
           expect(comment["body"]).to eq params[:body]
-          expect(Comment.last.commenter_id).to eq customer.id
+          expect(Comment.all.pluck(:commenter_id)).to include customer.id
         end
       end
     end

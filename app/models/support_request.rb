@@ -26,7 +26,7 @@ class SupportRequest < ApplicationRecord
     resolved: "resolved"
   }
 
-  before_save :set_uid
+  before_create :set_uid
 
   private
   def set_uid
