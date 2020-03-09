@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create index]
     member do
       patch '/assign', to: "admins#assign"
+      patch 'resolve', to: "support_requests#resolve"
       # post '/comments', to: "comments#create"
     end
   end

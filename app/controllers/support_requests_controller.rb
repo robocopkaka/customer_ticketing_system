@@ -1,7 +1,8 @@
 class SupportRequestsController < ApplicationController
   before_action :authenticate_customer, only: %i[create]
   before_action :authenticate_resources, only: %i[index]
-  before_action :find_support_request, only: %i[show]
+  before_action :find_support_request, only: %i[show resolve]
+  before_action :authenticate_support_agent, only: %i[resolve]
   def create
     support_request = SupportRequestService
                         .new(
@@ -21,6 +22,13 @@ class SupportRequestsController < ApplicationController
   end
 
   def show
+    json_response(@support_request, "")
+  end
+
+  # consider if support agents can resolve tickets not assigned to
+  # them
+  def resolve
+    @support_request.update(status: 'resolved', resolved_at: Time.now)
     json_response(@support_request, "")
   end
 

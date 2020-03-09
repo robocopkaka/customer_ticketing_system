@@ -153,4 +153,21 @@ RSpec.describe SupportRequestsController, type: :request do
       end
     end
   end
+
+  describe "#resolve" do
+    context "when request is made to resolve a request" do
+      before do
+        created_request.update(assignee_id: support_agent.id)
+        patch resolve_support_request_path(created_request.id),
+              headers: authenticated_headers(support_agent.id)
+      end
+
+      it "marks the request as resolved" do
+        returned_request = json["data"]["support_request"]
+        expect(response).to have_http_status 200
+        expect(returned_request["status"]).to eq "Resolved"
+        expect(returned_request["resolved_at"]).to_not be nil
+      end
+    end
+  end
 end

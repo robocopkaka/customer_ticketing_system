@@ -2,7 +2,7 @@ class SupportAgent < User
   has_many :support_requests, foreign_key: 'assignee_id'
   has_many :comments, foreign_key: 'commenter_id'
 
-  before_save :set_uid
+  before_create :set_uid
 
   # using counter cache might not work here since I want more granularity
   def open_requests_count
