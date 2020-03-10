@@ -40,6 +40,13 @@ class SupportRequest < ApplicationRecord
 
   private
   def set_uid
-    self.uid = "request-#{SecureRandom.hex}"
+    token = "request-#{SecureRandom.hex}"
+    token_exists = SupportRequest.find_by(uid: token)
+
+    while token_exists
+      token = "request-#{SecureRandom.hex}"
+      token_exists = SupportRequest.find_by(uid: token)
+    end
+    self.uid = token
   end
 end

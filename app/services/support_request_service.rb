@@ -30,7 +30,9 @@ class SupportRequestService
     unless query.blank?
       return resource.support_requests
                            .where("status = ?", query)
+
     end
     resource.support_requests
+
   end
 end
