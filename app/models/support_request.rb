@@ -1,3 +1,4 @@
+require 'csv'
 class SupportRequest < ApplicationRecord
   self.primary_key = 'uid'
   delegate :customer, :support_agent, to: :users

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
   resources :support_requests, only: %i[create show index] do
     resources :comments, only: %i[create index]
+    get '/export', to: "support_requests#export_as_csv", on: :collection
     member do
       patch '/assign', to: "admins#assign"
       patch 'resolve', to: "support_requests#resolve"

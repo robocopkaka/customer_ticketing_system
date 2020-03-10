@@ -170,4 +170,17 @@ RSpec.describe SupportRequestsController, type: :request do
       end
     end
   end
+
+  describe "#export_as_csv" do
+    context "when a request is made" do
+      before do
+        get export_support_requests_path,
+            headers: authenticated_headers(support_agent.id)
+      end
+      it "calls the worker and returns a response" do
+        expect(response).to have_http_status 200
+        expect(json["extra"]).to eq "Generated requests have been sent to your mail"
+      end
+    end
+  end
 end

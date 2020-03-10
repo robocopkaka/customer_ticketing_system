@@ -2,7 +2,7 @@ class SupportRequestsController < ApplicationController
   before_action :authenticate_customer, only: %i[create]
   before_action :authenticate_resources, only: %i[index]
   before_action :find_support_request, only: %i[show resolve]
-  before_action :authenticate_support_agent, only: %i[resolve]
+  before_action :authenticate_support_agent, only: %i[resolve export_as_csv]
   def create
     support_request = SupportRequestService
                         .new(
@@ -33,8 +33,8 @@ class SupportRequestsController < ApplicationController
   end
 
   def export_as_csv
-    support_requests = SupportRequest.where("resolved_at > ?", Time.now - 1.month)
-    sps = support_requests.to_csv
+    SupportRequestWorker.perform_async(current_support_agent.id)
+    json_response({}, "Generated requests have been sent to your mail")
   end
 
   private

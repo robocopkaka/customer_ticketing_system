@@ -4,8 +4,8 @@ class SupportRequestMailer < ApplicationMailer
   def export
     @support_agent = SupportAgent.find_by!(uid: params[:agent_id])
     @filename = params[:filename]
-    attachments["#{@filename}.csv"] = File.read(@filename)
+    attachments["requests-#{Time.now}.csv"] = File.read(@filename)
 
-    mail(to: @support_agent.email)
+    mail(to: @support_agent.email, subject: "Exported requests")
   end
 end
