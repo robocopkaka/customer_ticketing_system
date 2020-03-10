@@ -16,6 +16,13 @@ class Customer < User
   private
 
   def set_uid
-    self.uid = generate_uid(self.type)
+    token = "cust-#{SecureRandom.hex}"
+    token_exists = Customer.find_by(uid: token)
+
+    while token_exists
+      token = "cust-#{SecureRandom.hex}"
+      token_exists = Customer.find_by(uid: token)
+    end
+    self.uid = token
   end
 end

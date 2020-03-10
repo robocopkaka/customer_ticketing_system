@@ -1,5 +1,5 @@
 class Comment < ApplicationRecord
-  # self.primary_key = 'uid'
+  self.primary_key = 'uid'
   belongs_to :support_request, primary_key: 'uid'
   belongs_to :customer,
              class_name: 'User',
@@ -19,11 +19,20 @@ class Comment < ApplicationRecord
 
   scope :order_asc, -> { order('created_at asc') }
 
-  before_create :set_uid
-
   validates_presence_of :body
 
+  before_create :set_uid
+
+  private
+
   def set_uid
-    "comm-#{SecureRandom.hex}"
+    token = "comm-#{SecureRandom.hex}"
+    token_exists = Comment.find_by(uid: token)
+
+    while token_exists
+      token = "comm-#{SecureRandom.hex}"
+      token_exists = Comment.find_by(uid: token)
+    end
+    self.uid = token
   end
 end
