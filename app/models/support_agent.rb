@@ -14,14 +14,8 @@ class SupportAgent < User
   end
 
   private
-  def set_uid
-    token = "supp-#{SecureRandom.hex}"
-    token_exists = SupportAgent.find_by(uid: token)
 
-    while token_exists
-      token = "supp-#{SecureRandom.hex}"
-      token_exists = SupportAgent.find_by(uid: token)
-    end
-    self.uid = token
+  def set_uid
+    self.uid = generate_uid(self.class.to_s)
   end
 end
