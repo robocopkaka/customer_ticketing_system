@@ -1,5 +1,6 @@
 require 'csv'
 class SupportRequest < ApplicationRecord
+  include GenerateUid
   self.primary_key = 'uid'
   delegate :customer, :support_agent, to: :users
 
@@ -39,14 +40,8 @@ class SupportRequest < ApplicationRecord
   end
 
   private
-  def set_uid
-    token = "request-#{SecureRandom.hex}"
-    token_exists = SupportRequest.find_by(uid: token)
 
-    while token_exists
-      token = "request-#{SecureRandom.hex}"
-      token_exists = SupportRequest.find_by(uid: token)
-    end
-    self.uid = token
+  def set_uid
+    self.uid = generate_uid(self.class.to_s)
   end
 end

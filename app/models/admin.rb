@@ -18,13 +18,6 @@ class Admin < User
   private
 
   def set_uid
-    token = "admi-#{SecureRandom.hex}"
-    token_exists = Admin.find_by(uid: token)
-
-    while token_exists
-      token = "admi-#{SecureRandom.hex}"
-      token_exists = Admin.find_by(uid: token)
-    end
-    self.uid = token
+    self.uid = generate_uid(self.class.to_s)
   end
 end
