@@ -12,6 +12,7 @@
 * Run `rails credentials:edit`
 * Add a key  - `db_user` and a value representing your database username
 * Add a key - `db_password` and a value representing your database password
+* Add a socket value depending on your OS - `/var/run/mysqld/mysqld.sock` for Ubuntu. `/tmp/mysql.sock` for MacOS
 * Save your new credentials
 * Run  `rails db:create` to create the database
 * Run `rails db:migrate` to create all the  necessary tables. 

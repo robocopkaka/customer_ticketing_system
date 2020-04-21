@@ -1,0 +1,43 @@
+language: ruby
+rbenv:
+- 2.5.5
+before_install:
+- gem install bundler
+cache: bundler
+before_script:
+#- mysql -e "mysqladmin -u root password "$DB_PASSWORD""
+- mysqladmin -u root password $DB_PASSWORD
+- bundle exec rails db:create --all
+- bundle exec rails db:migrate
+script:
+- bundle exec rake ci:tests
+services:
+- mysql
+notifications:
+  email: false
+env:
+  secure: eCxf/x7EeeycmuQ9bOsZVedqPbeIkngSCdXr1vH69m5AxMV3P5JAsYVwEsz1B2PFq7Vf5zJIFEOOz7uRs6Q25dHZd0KQbPm19pDv+tc3SR2zEFRO5IzPXDXhedhdknn3f9FgDZzeXFEigQs2rSgcvtSmjLQOjKSYSu+wTqMSkdwkm24fkBCt2kpqX8TtntZxI3OlUvnywd7EPQ414+ZTAEqRaau+K805El3uO5DMj3jLFzTi1GyIkE91RIRFbrGr8LCRh1MSnQF6SkWW+S9xplrgEttWJbDUB6V+bXFyIKp3j1AZe/dsgnaFCr24WC3PSeDaqt0Cb4VQBbhDtfy+3quaYVPJItGAmiFe39gnHwOXKC7vLI8Bx/N34qSNik0P+ldAMeILk/L5IRSHz4HqRqMDUrXYiuFgtPggkHEHSxKuKdlRH/8YXyKeDwbxaKg/dwt5wk8tgtcKYg77aqsq34aP/KiBcKByZvSFnEctT855r2p6HfUIYpz/nQlQGtNETQR7qyIT4Bp7Kpw0fg75tovtFx5Q2a3P9Ci4o6GdFSJ4aWQB1okk3ct+34e+l3LNshFi6PvaEUUU+IzAN4GLlap3o8CSOvTmK4ei3bE1oFmtKDp/bQbqNxQ3fdcnhvCtiEr42MA75/5CWysqsibqjRCMZZrAgKuQd1DffiNz4XU=
+deploy:
+- provider: codedeploy
+  wait_until_deployed: true
+  access_key_id: AKIAJM3HYPHKX7QGGAQQ
+  secret_access_key: &1
+    secure: R7NO2BLrlthbg56tyKsfjl6WgZ+mFneMz2BbQbZTVPTP/yRQJpVjW2ZAaIh1AJvyYQS3m9buiv1NqXcdsC3T7YBMthAjqZ8kUV5VtrjatzNR7bY3m/ArCwNQ2LmJkXJJdVeIG9XzR+bE7EebZGD3fo1hB1nduMufytoxEw0Yc3QP84tzdIZsLZK9Yti64CfdwKGRZb3qX0ubR97rYh6h6rauVkH0EjCuZqKT+PkF7J/IqsFcJo/mYytY1pQQUX1U2o/kEomn5FMuvJykJl5+e80IszTEr+NvmbOvgHZYloYdbWOyTgMN/0MnASAFyS2o6iHvvT67puPr3YXPZ1D/V3hx13gp8fVJMQQQfL4l82PPlPbOBUNWLq9a9teQTeNRZVyxaaKiaFXHr6nlxZkcH5fiSI9Ee624H06WHEDR29dZFBGHqo66op2P6E60SQy16bMEsXKwnkzbNLd/sLnTqTr00+bJ50MJH5U0kUY1Dgf05pyTWRWxb+Ccbxyp64lJRLd70KF3eoPSsAP4lIaG/QybHsbHYXjrFqQDwluqRC+mzcnQXlhyAC+Z0xbTV2fK6W3INMb1GprwrGBCf4GgfoYcheDuOBOymak2DkoKy00BlFzwkVr2vKUZH2Kc8aDkKlyF50ZQMohAj73yjZEt9icUfAMPZt2Rv/ASbcn2liE=
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  on: &2
+    repo: robocopkaka/customer_ticketing_system
+  bucket: customer-ticketing-kachi
+- provider: codedeploy
+  access_key_id: AKIAJM3HYPHKX7QGGAQQ
+  secret_access_key: *1
+  bucket: customer-ticketing-kachi
+  key: CustomerTicketingApp.zip
+  bundle_type: zip
+  application: codedeploy-ec2
+  deployment_group: codedeploy-customer-ticketing-kachi
+  on:
+    branch: ch-setup-ci-deploy
+before_deploy:
+- mkdir -p dpl_cd_upload
+- mv CustomerTicketingApp.zip dpl_cd_upload/CustomerTicketingApp.zip

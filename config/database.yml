@@ -15,7 +15,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: <%= Rails.application.credentials.dig(:db_user) %>
   password: <%= Rails.application.credentials.dig(:db_password) %>
-  socket: /tmp/mysql.sock
+  socket: <%= Rails.application.credentials.dig(:socket) %>
 
 development:
   <<: *default
@@ -49,6 +49,8 @@ test:
 #
 production:
   <<: *default
-  database: customer_ticketing_system_production
-  username: customer_ticketing_system
-  password: <%= ENV['CUSTOMER_TICKETING_SYSTEM_DATABASE_PASSWORD'] %>
+  database: <%= ENV['RDS_DATABASE'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  host: <%= ENV['RDS_HOST'] %>
+  port: 3306

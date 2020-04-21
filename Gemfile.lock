@@ -141,7 +141,7 @@ GEM
       method_source (~> 0.9.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    puma (4.3.2)
+    puma (4.3.3)
       nio4r (~> 2.0)
     rack (2.2.2)
     rack-cors (1.0.3)
@@ -263,7 +263,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 2.5.3p105
+   ruby 2.5.5p157
 
 BUNDLED WITH
    2.1.4
