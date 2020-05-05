@@ -1,0 +1,23 @@
+language: ruby
+rbenv:
+- 2.5.3
+before_install:
+- gem install bundler
+cache: bundler
+before_script:
+- mysqladmin -u root password $DB_PASSWORD
+- bundle exec rails db:create --all
+- bundle exec rails db:migrate
+script:
+- bundle exec rake ci:tests
+services:
+- mysql
+notifications:
+  email: false
+env:
+  secure: oDzIHtvn9GhFXd0b0xY4hjq/WH4qLWwzt+zb/SFJhvnT1kICc2Za0xuUiIYmsN0phOhLxI1WbaYmP74m9X2P8SIFT7TgqH/3Y4jDlw0xJVbL2di9s2/82O8UI/+PrUtyVWkuwMD2A9N2haGgFc4H34+sWe7byyljGh5zue/lEm+uzsjLztyhPABKKP2jhe40hBEdouFxXd8SYAPS4GZLZyjQIl6h8JeOsx+TqDtCkgLIEjfh6wpsnvInbA/iIZ4cXY64/gghk9JnyKLfkCQqo4cFIYMh4+KXkSscM7VV1ywgkMgR676mnv90n53GxNl6DCMxCxpLTHIqQASlZ7w3BdfJpnEyDrpiafikp3CdpLe6y/GT4bmyRaRoimzUOXpACSzgs2vMzy/BG8icwRaMLGBkVBWW/Zzm1eZsLAsie7yEO+2UfBlbBhy8SrzxNsw/6i50xAuc0fAVQsFWuZXzo86Lh+wfJSlRvzBc5FUDT8dsBIAMSyiVY6ReZ0E7XvqmTXAN4E4Yl6pjDlL9vY2Tmy0L9bO6iwzy874dRLAKfoyNW6cjGZyBD0EdmKvdCOLyc18eUChU3MOKIuMb4wkSpHdewA0QVRVIEJgEL5lT2GdVaFXkaYdm6W4Tju5X7B89cUEQ/VSD8IgB1avjYp/cpD6iWnU+lbyMhQ9IKuwXhrY=
+deploy:
+  provider: heroku
+  app: desolate-basin-79736
+  api_key:
+    secure: lSE2AufGhrhQDK6NWUCd/qJwQkoZpo9u5WEoCzWk3vs4uQ13wEaB7TPqfOXzaJi3V6mDi3y+v93LX28zouY+/C5swzClDDVJz+Ov96Qp1IGvJRFR55So1fAwzupeEcqlRMBGrzxEkOo7v+xJ998+Fa7hWuBb5+lt2TZ3ijcUI25qVXIytfFL2W2O7EudvPYJVlchqCGlTOYmT9VfY6/H3IOHUBXZvo9wlBVOovybFa9hnqd//ZrNO52lcxnWAWsKmTDxQyU3FpoHDzFed4f+KqCSYoQJR4M2Y7roKLz3ws4pm9up9tsdZtsZ+1vFitZdiX0vYY+fE6Scolxt8x3BnS/C+H/o3jfPD00cVLkSoAzu6W4UHc5rqstnFpdKNo6vx4eK3+AAaAhTGmxeUCDGUIrkdQbZKhTD+8GDjtIodzkWSD3BOftMw+RcsLFWLawAUMZAUXDBLbbDtX8aTcb7nyPTx0TJ8BX3TeOEvvpkB/rRGYFYArOQvQPrH1NbGlddedmtXHuLfCkLtH2YXA92DawJ0hLGSKYAidG2iOmIMGgbeWruT2g/IoWQt+Cux5IFxkqpHnSUqovKubuq1TQwMHpdmfL6XfLdorDpE3zYx+b1vw5BO9MMRRzjgDdRkY/Wyrmv0DBKhZXj1U550E3FAlTTktuwdpeHG0xNN8SJmIY=
