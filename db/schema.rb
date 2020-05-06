@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_03_02_165508) do
 
-  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.text "body"
     t.string "commenter_id"
     t.string "support_request_id"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_165508) do
     t.string "uid"
   end
 
-  create_table "support_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "support_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "subject", null: false
     t.text "description", null: false
     t.datetime "resolved_at"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_165508) do
     t.string "uid", null: false
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
     t.string "phone_number"
