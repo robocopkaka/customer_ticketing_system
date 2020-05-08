@@ -21,6 +21,11 @@ class SupportRequestsController < ApplicationController
     })
   end
 
+  def group_by_priority
+    requests = SupportRequestService.group_by_priority(authenticate_resources)
+    json_response(requests, "")
+  end
+
   def show
     json_response(@support_request, "")
   end

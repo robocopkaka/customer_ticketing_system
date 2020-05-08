@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe SupportRequestService, type: :service do
   let(:customer) { FactoryBot.create(:customer) }
+  let(:admin) { FactoryBot.create(:admin) }
   let(:support_request) { FactoryBot.create(:support_request) }
   let(:support_agent) { FactoryBot.create(:support_agent) }
   let(:params) { FactoryBot.attributes_for(:support_request) }
@@ -69,6 +70,22 @@ RSpec.describe SupportRequestService, type: :service do
       it "returns an empty result set" do
         sp = SupportRequestService.fetch_requests(support_agent, "weird")
         expect(sp.count).to eq 0
+      end
+    end
+  end
+
+  describe ".group_by_priority" do
+    let!(:requests) { FactoryBot.create_list(:support_request, 20) }
+    context "when a call is made" do
+      it "returns requests grouped by priority" do
+        requests = SupportRequestService.group_by_priority(admin)
+        expect(requests).to be_a Hash
+        expect(requests).to have_key "low"
+        expect(requests).to have_key "normal"
+        expect(requests).to have_key "high"
+        total_count = 0
+        requests.each_value { |value| total_count += value.count }
+        expect(total_count).to eq 20
       end
     end
   end

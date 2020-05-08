@@ -19,6 +19,7 @@ RSpec.describe SupportRequestsController, type: :request do
         expect(response).to have_http_status(201)
         expect(returned_request["status"]).to eq "Opened"
         expect(returned_request["requester_id"]).to eq customer.id
+        expect(returned_request["priority"]).to eq "normal"
         expect(SupportRequest.last.description).to eq support_request[:description]
       end
 
@@ -88,7 +89,7 @@ RSpec.describe SupportRequestsController, type: :request do
     end
   end
 
-  describe "/support_agents/:support_agent_id/requests" do
+  describe "get /support_agents/:support_agent_id/requests" do
     let!(:new_requests) { FactoryBot.create_list(:support_request, 5, assignee_id: support_agent.id) }
     context "when a valid support agent id is passed" do
       before do
@@ -180,6 +181,26 @@ RSpec.describe SupportRequestsController, type: :request do
       it "calls the worker and returns a response" do
         expect(response).to have_http_status 200
         expect(json["extra"]).to eq "Generated requests have been sent to your mail"
+      end
+    end
+  end
+
+  describe "#group_by_priority" do
+    let!(:requests) { FactoryBot.create_list(:support_request, 20) }
+    let(:admin_id) { FactoryBot.create(:admin).id }
+    context "when a request is made to return requests by priorities" do
+      before do
+        get priorities_support_requests_path,
+            headers: authenticated_headers(admin_id)
+      end
+      it "returns a hash of grouped requests" do
+        expect(response).to have_http_status 200
+        expect(json["data"]).to have_key "low"
+        expect(json["data"]).to have_key "high"
+        expect(json["data"]).to have_key "normal"
+
+        high_priorities = json["data"]["high"]["support_requests"]
+        expect(high_priorities.pluck("priority").uniq).to eq ["high"]
       end
     end
   end

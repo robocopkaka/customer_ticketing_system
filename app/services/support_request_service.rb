@@ -26,13 +26,17 @@ class SupportRequestService
     @support_request
   end
 
-  def self.fetch_requests(resource, query="")
+  def self.fetch_requests(resource, query = "")
     unless query.blank?
       return resource.support_requests
                            .where("status = ?", query)
 
     end
     resource.support_requests
+  end
 
+  # call fetch requests first and then group
+  def self.group_by_priority(resource)
+    fetch_requests(resource).group_by(&:priority)
   end
 end
