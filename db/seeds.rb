@@ -29,7 +29,8 @@ customers = Customer.first(5).pluck(:id)
   SupportRequest.create!(
     subject: Faker::Lorem.word,
     description: Faker::Lorem.paragraph(sentence_count: 1),
-    requester_id: customers.sample
+    requester_id: customers.sample,
+    priority: ["low", "normal", "high"].sample
   )
 end
 

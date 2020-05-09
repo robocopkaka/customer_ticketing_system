@@ -28,6 +28,12 @@ class SupportRequest < ApplicationRecord
     resolved: "resolved"
   }
 
+  enum priority: {
+    low: "low",
+    normal: "normal",
+    high: "high"
+  }
+
   before_create :set_uid
 
   def self.to_csv

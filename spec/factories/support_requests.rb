@@ -5,5 +5,6 @@ FactoryBot.define do
     resolved_at { nil }
     requester_id { create(:customer).id }
     assignee_id { nil }
+    priority { ["low", "high", "normal"].sample }
   end
 end

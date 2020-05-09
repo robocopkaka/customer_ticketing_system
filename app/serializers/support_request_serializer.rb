@@ -3,6 +3,7 @@ class SupportRequestSerializer < ActiveModel::Serializer
              :subject,
              :description,
              :status,
+             :priority,
              :requester_id,
              :assignee_id,
              :created_at,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_02_165508) do
+ActiveRecord::Schema.define(version: 2020_05_08_054039) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.text "body"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_165508) do
     t.datetime "updated_at", precision: 6, null: false
     t.column "status", "enum('opened','assigned','resolved')", default: "opened"
     t.string "uid", null: false
+    t.column "priority", "enum('low','normal','high')", default: "normal"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
