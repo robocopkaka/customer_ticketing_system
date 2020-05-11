@@ -5,12 +5,13 @@ class AssignRequestsWorker
   include Sidekiq::Worker
   sidekiq_options(retry: 1)
 
-  def perform(request_id:)
-    agents = available_agents
-    open_request_notifier if agents.empty?
+  def perform(request_id)
+    return open_request_notifier(request_id) if available_agents.empty?
     SupportRequestService
       .new
-      .assign_request(request_id: request_id, assignee_id: agents.first.id)
+      .assign_request(
+        request_id: request_id, assignee_id: available_agents.first.id
+      )
   end
 
   private
@@ -22,8 +23,12 @@ class AssignRequestsWorker
   end
 
   # if there's no agent to handle a request. Send a mail to admin with it
-
-  def open_request_notifier
-    p "Yay for now"
+  def open_request_notifier(request_id)
+    AdminMailer
+      .with(
+        support_request_id: request_id
+      )
+      .no_available_agent
+      .deliver_later
   end
 end

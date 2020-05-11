@@ -38,7 +38,7 @@ class SupportRequestsController < ApplicationController
   end
 
   def export_as_csv
-    SupportRequestWorker.perform_async(current_support_agent.id)
+    ExportRequestsWorker.perform_async(current_support_agent.id)
     json_response({}, "Generated requests have been sent to your mail")
   end
 
@@ -58,5 +58,9 @@ class SupportRequestsController < ApplicationController
   # run authentications for both customers and support_agents
   def authenticate_resources
     authenticate_for(SupportAgent) || authenticate_for(Customer) || authenticate_for(Admin)
+  end
+
+  def trigger_assign_requests_worker
+    AssignRequestsWorker
   end
 end

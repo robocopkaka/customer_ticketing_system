@@ -8,6 +8,7 @@ class SupportRequestService
   def create
     support_request = @customer.support_requests.create!(@request_params)
     support_request.tap do |req|
+      AssignRequestsWorker.perform_async(req.id)
       CustomerMailer
         .with(customer_id: @customer.id, support_request_id: req.id)
         .open_request.deliver_later

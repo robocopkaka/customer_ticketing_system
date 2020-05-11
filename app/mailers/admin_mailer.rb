@@ -10,4 +10,10 @@ class AdminMailer < ApplicationMailer
          bcc: admin_emails
     )
   end
+
+  def no_available_agent
+    @support_request_id = params[:support_request_id]
+    admin_emails = Admin.all.pluck(:email)
+    mail(to: admin_emails, subject: "No available agent")
+  end
 end

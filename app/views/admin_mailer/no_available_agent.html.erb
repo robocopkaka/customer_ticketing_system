@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Greetings Admin</h1>
+<p>
+  This request with ID <%= link_to "##{@support_request_id}", support_request_url(@support_request_id) %>
+  can't be assigned to an agent as they are all occupied.
+  <br />
+  Please assign this manually or wait till an agent has resolved a task
+</p>
+</body>
+</html>

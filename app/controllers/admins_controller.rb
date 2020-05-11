@@ -5,10 +5,11 @@ class AdminsController < ApplicationController
 
   def assign
     support_request = SupportRequestService
-                        .new(
-                          request_params: params,
-                          support_request: @support_request
-                        ).assign_request
+                        .new
+                        .assign_request(
+                          request_id: params[:id],
+                          assignee_id: params[:assignee_id]
+                        )
     json_response(support_request, "Request assigned successfully")
   end
 
