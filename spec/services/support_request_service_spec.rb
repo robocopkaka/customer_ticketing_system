@@ -34,11 +34,12 @@ RSpec.describe SupportRequestService, type: :service do
 
   describe "assign_request" do
     context "when a support request is assigned" do
-      before { params[:assignee_id] = support_agent.id }
       it "returns the request with the assigned id" do
         sp = SupportRequestService
-               .new(request_params: params, support_request: support_request)
-               .assign_request
+               .new
+               .assign_request(
+                 assignee_id: support_agent.id, request_id: support_request.id
+               )
         expect(sp.assignee_id).to eq support_agent.id
         expect(sp.assignee_id).to eq SupportRequest.last.assignee_id
       end

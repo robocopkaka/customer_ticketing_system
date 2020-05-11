@@ -1,8 +1,0 @@
-id,subject,description,resolved_at,requester_id,assignee_id,created_at,updated_at,status,uid
-1,Repairs,Test mailerTest mailerTest mailerTest mailerTest mailerTest mailer,2020-03-09 13:09:13 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-02 15:40:28 UTC,2020-03-09 13:09:13 UTC,resolved,request-d34fc047e1968ac9ee96ac043fa283d3
-2,Repairs,Test mailer,2020-03-09 13:11:26 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-02 16:02:17 UTC,2020-03-09 13:11:26 UTC,resolved,request-9e1a58fc6154362c4424ce7fd5ecdc9e
-3,Repairs,Test mailer,2020-03-09 13:20:46 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-02 16:05:50 UTC,2020-03-09 13:20:46 UTC,resolved,request-9a8035f4074da88648655099a6c97a4e
-4,Tech,Tech,2020-03-09 13:23:40 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-04 17:32:36 UTC,2020-03-09 13:23:40 UTC,resolved,request-ed63ab46d588fe9f438c8f67c3e9710a
-5,Retro,Everything is broken,2020-03-09 13:26:05 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-04 17:36:58 UTC,2020-03-09 13:26:05 UTC,resolved,request-c9f3c5ae9ccf9a7abb1b9d3b21553fc0
-7,Retro,ret,2020-03-09 13:29:00 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-04 17:47:42 UTC,2020-03-09 15:21:05 UTC,assigned,request-ed21b355c219929c46cdb690611ad10a
-8,Tech,Tech,2020-03-09 13:37:45 UTC,cust-5260c567787f47cc74158b272e9cdb8f,supp-4e9316af82f2249fd3e65b4c1714379c,2020-03-04 17:49:09 UTC,2020-03-09 13:37:45 UTC,resolved,request-2e97ed35e3feb2fc9b47e320e17608ec

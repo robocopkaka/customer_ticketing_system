@@ -22,6 +22,11 @@ gem 'puma', '~> 4.1'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+# counter cache gem to help with conditional caches
+gem "counter_culture", "~> 2.0"
+# faker gem
+gem "faker"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
@@ -40,7 +45,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'guard'
   gem 'guard-rspec',  require: false
-  gem 'faker'
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'shoulda-matchers'

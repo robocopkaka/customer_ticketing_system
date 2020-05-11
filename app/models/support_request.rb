@@ -2,7 +2,6 @@ require 'csv'
 class SupportRequest < ApplicationRecord
   include GenerateUid
   self.primary_key = 'uid'
-  delegate :customer, :support_agent, to: :users
 
   belongs_to :customer,
              class_name: 'User',
@@ -13,6 +12,8 @@ class SupportRequest < ApplicationRecord
              class_name: 'User',
              foreign_key: 'assignee_id',
              optional: true
+  counter_culture :support_agent,
+                  column_name: proc { |model| model.status == "assigned" ? "support_requests_count" : nil }
 
   has_many :comments, primary_key: 'uid'
 
