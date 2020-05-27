@@ -24,4 +24,7 @@ Rails.application.routes.draw do
   post "admins/login" => "admin_token#create"
   post "customers/login", to: "customer_token#create"
   post "support_agents/login" => "support_agent_token#create"
+
+  # sessions
+  get '/track', to: "sessions#track"
 end

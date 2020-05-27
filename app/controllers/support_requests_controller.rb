@@ -1,4 +1,5 @@
 class SupportRequestsController < ApplicationController
+  before_action :authenticate_kachi
   before_action :authenticate_customer, only: %i[create]
   before_action :authenticate_resources, only: %i[index]
   before_action :find_support_request, only: %i[show resolve]
