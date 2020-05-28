@@ -7,4 +7,6 @@ class User < ApplicationRecord
   validates :email,
             format: { with: REGEX },
             uniqueness: { case_sensitive: false }
+
+  has_many :sessions, as: :session_user
 end

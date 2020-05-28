@@ -22,16 +22,17 @@ ActiveRecord::Schema.define(version: 2020_05_26_120649) do
   end
 
   create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.boolean "active"
+    t.boolean "active", default: true
     t.string "user_agent"
-    t.datetime "expires_at"
+    t.datetime "expires_at", default: "2020-05-29 08:23:55"
     t.datetime "deleted_at"
-    t.bigint "user_id", null: false
+    t.string "session_user_id"
+    t.string "session_user_type"
     t.string "uid", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_user_id", "session_user_type"], name: "index_sessions_on_session_user_id_and_session_user_type"
     t.index ["uid"], name: "index_sessions_on_uid", unique: true
-    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "support_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -61,5 +62,4 @@ ActiveRecord::Schema.define(version: 2020_05_26_120649) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "sessions", "users"
 end

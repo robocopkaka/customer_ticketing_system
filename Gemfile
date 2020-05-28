@@ -22,6 +22,8 @@ gem 'puma', '~> 4.1'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+# bullet for optimizing queries
+
 # counter cache gem to help with conditional caches
 gem "counter_culture", "~> 2.0"
 # faker gem
@@ -51,6 +53,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "bullet"
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
