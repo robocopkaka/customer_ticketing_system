@@ -6,7 +6,7 @@ class Session < ApplicationRecord
   belongs_to :session_user, polymorphic: true
 
   #scopes
-  scope :active, -> { where(active: true) }
+  scope :active, -> { where("expires_at > ?", Time.current) }
 
 
   before_create :set_uid

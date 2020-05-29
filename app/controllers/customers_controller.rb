@@ -1,10 +1,11 @@
 class CustomersController < ApplicationController
   def create
     customer = Customer.create!(customer_params)
-    auth_token = Knock::AuthToken.new payload: { sub: customer.uid }
+    # using association `create` instead of service here
+    customer.sessions.create!(user_agent: request.headers["HTTP_USER_AGENT"])
     json_response(
       customer,
-      { jwt: auth_token.token },
+      { session_id: customer.sessions.last.id },
       :created
     )
   end
@@ -12,7 +13,8 @@ class CustomersController < ApplicationController
   private
 
   def customer_params
-    params.permit(
+    params
+      .permit(
       :name,
       :email,
       :phone_number,

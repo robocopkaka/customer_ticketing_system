@@ -5,15 +5,15 @@ module Authenticate
   private
 
   def method_missing(method, *args)
-    klass = method.to_s.split("_")[1]
+    klass = method.to_s.split("_").last(2).join("_")
     unless klass.camelize.constantize
       raise NoMethodError.new("Method #{method} does not exist")
     end
 
-    authenticate_klass(klass)
+    authenticate_user(klass)
   end
 
-  def authenticate_klass(klass)
+  def authenticate_user(klass)
     session_id = request.headers["HTTP_SESSION_ID"]
     unless instance_variable_defined?("@current_#{klass.underscore}")
       session = Session.active.find_by!(uid: session_id)

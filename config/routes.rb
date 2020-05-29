@@ -21,10 +21,10 @@ Rails.application.routes.draw do
       # post '/comments', to: "comments#create"
     end
   end
-  post "admins/login" => "admin_token#create"
-  post "customers/login", to: "customer_token#create"
-  post "support_agents/login" => "support_agent_token#create"
 
   # sessions
   get '/track', to: "sessions#track"
+  post "admins/login", to: "sessions#create"
+  post "customers/login", to: "sessions#create"
+  post "support_agents/login", to: "sessions#create"
 end
