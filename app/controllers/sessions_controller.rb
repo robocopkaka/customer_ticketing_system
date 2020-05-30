@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  before_action :find_session, only: %i[update refresh destroy]
   def create
     session = SessionService.create(session_params)
     json_response(session, "", :created)
@@ -11,6 +12,10 @@ class SessionsController < ApplicationController
   def update
   end
 
+  def refresh
+    @session.update!(expires_at: @session.expires_at + 24.hours)
+  end
+
   private
 
   def session_params
@@ -21,5 +26,9 @@ class SessionsController < ApplicationController
       .permit(:email, :password)
       .merge(role)
       .merge(user_agent)
+  end
+
+  def find_session
+    @session ||= Session.find_by!(id: params[:id])
   end
 end

@@ -1,4 +1,5 @@
 class SupportRequestsController < ApplicationController
+  skip_after_action :refresh_session, only: %i[group_by_priority export_as_csv show]
   before_action :authenticate_customer, only: %i[create]
   before_action :authenticate_resources, only: %i[index]
   before_action :find_support_request, only: %i[show resolve]
@@ -58,9 +59,5 @@ class SupportRequestsController < ApplicationController
   # run authentications for both customers and support_agents
   def authenticate_resources
     authenticate_for(SupportAgent) || authenticate_for(Customer) || authenticate_for(Admin)
-  end
-
-  def trigger_assign_requests_worker
-    AssignRequestsWorker
   end
 end

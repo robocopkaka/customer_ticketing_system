@@ -1,4 +1,5 @@
 class CustomersController < ApplicationController
+  skip_after_action :refresh_session
   def create
     customer = Customer.create!(customer_params)
     # using association `create` instead of service here

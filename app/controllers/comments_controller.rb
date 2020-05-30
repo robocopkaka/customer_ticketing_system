@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  skip_after_action :refresh_session, only: :index
   before_action :authenticate_resources, only: %i[create]
   before_action :find_request, only: %i[create index]
   before_action :customer_can_post, only: %i[create]
