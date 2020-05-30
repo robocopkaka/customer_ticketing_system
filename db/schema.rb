@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_120649) do
 
   create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "user_agent"
-    t.datetime "expires_at", default: "2020-05-30 08:20:33"
+    t.datetime "expires_at"
     t.datetime "deleted_at"
     t.string "session_user_id"
     t.string "session_user_type"

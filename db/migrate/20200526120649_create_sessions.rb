@@ -2,7 +2,7 @@ class CreateSessions < ActiveRecord::Migration[6.0]
   def change
     create_table :sessions do |t|
       t.string :user_agent
-      t.datetime :expires_at, default: Time.current + 24.hours
+      t.datetime :expires_at
       t.datetime :deleted_at
       # change this from session_user to user after removing STI
       t.string :session_user_id

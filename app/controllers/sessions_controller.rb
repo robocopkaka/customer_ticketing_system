@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
-  before_action :find_session, only: %i[update refresh destroy]
+  skip_after_action :refresh_session, only: %i[create index destroy]
+  before_action :find_session, only: %i[update refresh destroy show]
+  # authenticate customer before retrieving index
   def create
     session = SessionService.create(session_params)
     json_response(session, "", :created)
@@ -10,10 +12,22 @@ class SessionsController < ApplicationController
   end
 
   def update
+    @session.update!(session_params)
+    json_response(@session, "")
   end
 
-  def refresh
-    @session.update!(expires_at: @session.expires_at + 24.hours)
+  def index
+    sessions = Session.active.all
+    json_response(sessions, "")
+  end
+
+  def show
+    json_response(@session, "")
+  end
+
+  def destroy
+    @session.update!(deleted_at: Time.current)
+    json_response(@session, "")
   end
 
   private
@@ -29,6 +43,6 @@ class SessionsController < ApplicationController
   end
 
   def find_session
-    @session ||= Session.find_by!(id: params[:id])
+    @session ||= Session.active.find_by!(uid: params[:id])
   end
 end
