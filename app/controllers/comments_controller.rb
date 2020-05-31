@@ -1,9 +1,8 @@
 class CommentsController < ApplicationController
   skip_after_action :refresh_session, only: :index
-  before_action :authenticate_resources, only: %i[create]
+  prepend_before_action :authenticate_user, only: %i[create index]
   before_action :find_request, only: %i[create index]
   before_action :customer_can_post, only: %i[create]
-  before_action :is_logged_in?, only: %i[create index]
 
 
   def create
@@ -17,7 +16,6 @@ class CommentsController < ApplicationController
     json_response(comments, "")
   end
 
-
   private
 
   def find_request
@@ -25,7 +23,7 @@ class CommentsController < ApplicationController
   end
 
   def customer_can_post
-    commenter = authenticate_resources
+    commenter = @user
     return unless commenter && commenter.type == "Customer"
 
     if @support_request.comments.empty?
@@ -33,20 +31,9 @@ class CommentsController < ApplicationController
     end
   end
 
-  # run authentications for both customers and support_agents
-  def authenticate_resources
-    authenticate_for(SupportAgent) || authenticate_for(Customer) || authenticate_for(Admin)
-  end
-
-  def is_logged_in?
-    return unless authenticate_resources.nil?
-
-    render json: { errors: [{user: ["is unauthorized"]}] },status: 401
-  end
-
   def comment_params
     params
       .permit(:body)
-      .merge(commenter_id: authenticate_resources.id)
+      .merge(commenter_id: @user.id)
   end
 end

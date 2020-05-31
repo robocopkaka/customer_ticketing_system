@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
-  include Knock::Authenticable
   include Response
   include Error::ErrorHandler
   include Authenticate
@@ -11,8 +10,8 @@ class ApplicationController < ActionController::API
   def refresh_session
     session_id = request.headers["HTTP_SESSION_ID"]
 
-    return unless session_id
     session ||= Session.active.find_by(uid: session_id)
+    return unless session
     session.update!(expires_at: session.expires_at + 24.hours)
   end
 end

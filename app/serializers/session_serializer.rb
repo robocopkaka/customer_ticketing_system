@@ -23,4 +23,12 @@ class SessionSerializer < ActiveModel::Serializer
   def deleted
     object.deleted_at.present?
   end
+
+  def deleted_at
+    object.deleted_at&.iso8601
+  end
+
+  def expires_at
+    object.expires_at&.iso8601
+  end
 end

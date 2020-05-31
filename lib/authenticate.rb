@@ -5,15 +5,20 @@ module Authenticate
   private
 
   def method_missing(method, *args)
-    klass = method.to_s.split("_").last(2).join("_")
+    klass = method.to_s.split("_").reject {|val| val == "authenticate" }.join("_")
     unless klass.camelize.constantize
       raise NoMethodError.new("Method #{method} does not exist")
     end
 
-    authenticate_user(klass)
+    case klass
+    when "user"
+      authenticate_all
+    else
+      authenticate_entity(klass)
+    end
   end
 
-  def authenticate_user(klass)
+  def authenticate_entity(klass)
     session_id = request.headers["HTTP_SESSION_ID"]
     unless instance_variable_defined?("@current_#{klass.underscore}")
       session = Session.active.find_by!(uid: session_id)
@@ -26,9 +31,19 @@ module Authenticate
         instance_variable_set(:"@current_#{klass.underscore}", user)
         return
       end
-      render json: {
-        message: "You are not authorized to perform this operation"
-      }, status: :unauthorized
+      render json: { errors: [{user: ["is unauthorized"]}] },status: :unauthorized
+    end
+  end
+
+  # should only be used to in specific cases to authenticate
+  # regardless of child classes
+  def authenticate_all
+    session_id = request.headers["HTTP_SESSION_ID"]
+    unless instance_variable_defined?("@user")
+      session = Session.includes(:session_user).active.find_by!(uid: session_id)
+      user = session.session_user
+
+      instance_variable_set(:@user, user)
     end
   end
 end
