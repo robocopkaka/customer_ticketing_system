@@ -3,7 +3,7 @@ module Error
     def self.included(clazz)
       clazz.class_eval do
         rescue_from ActiveRecord::RecordNotFound do |e|
-          message = "#{e.model} was not found"
+          message = "#{e.model.underscore.humanize} was not found"
           respond(:record_not_found, 404, message)
         end
         rescue_from ActiveRecord::RecordInvalid do |e|

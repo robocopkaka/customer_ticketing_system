@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AdminsController, type: :request do
+  let(:admin_session) { create(:session, :for_admin) }
   let!(:admin) { FactoryBot.create :admin }
   let(:support_request) { FactoryBot.create :support_request }
   let(:support_agent) { FactoryBot.create :support_agent }
@@ -9,28 +10,30 @@ RSpec.describe AdminsController, type: :request do
   describe "/admins/login" do
     let(:params) do
       {
-        auth: {
-          email: admin[:email],
-          password: "password",
-        }
+        email: admin[:email],
+        password: "password"
       }
     end
 
     context "when valid login details are used" do
       it "logs in the user and returns a token" do
         post admins_login_path, params: params
+        returned_session = json["data"]["session"]
         expect(response).to have_http_status 201
-        expect(json).to have_key "jwt"
+        expect(returned_session["active"]).to be true
+        expect(returned_session["role"]).to eq "Admin"
+        expect(returned_session["expires_at"]).to be > Time.current
       end
     end
 
     context "when invalid login details are used" do
       before do
-        params[:auth][:password] = "random"
+        params[:password] = "random"
         post admins_login_path, params: params
       end
       it "returns an error" do
-        expect(response).to have_http_status 404
+        expect(response).to have_http_status 401
+        expect(json["message"]).to eq "Invalid email/password"
       end
     end
   end
@@ -42,7 +45,7 @@ RSpec.describe AdminsController, type: :request do
       before do
         ActionMailer::Base.deliveries.clear
         patch assign_support_request_path(support_request.id),
-              headers: authenticated_headers(admin.id),
+              headers: authenticated_headers(admin_session.id),
               params: params
       end
       it "assigns the request to a support agent" do
@@ -61,13 +64,13 @@ RSpec.describe AdminsController, type: :request do
       before do
         params[:assignee_id] = customer.id
         patch assign_support_request_path(support_request.id),
-              headers: authenticated_headers(admin.id),
+              headers: authenticated_headers(admin_session.id),
               params: params
       end
       it "returns an error" do
         errors = json["errors"].first
         expect(response).to have_http_status 404
-        expect(errors["messages"]).to eq "Resource was not found"
+        expect(errors["messages"]).to eq "Support agent was not found"
       end
     end
   end

@@ -6,12 +6,11 @@ class SessionsController < ApplicationController
 
   def create
     session = SessionService.create(session_params)
+    unless session
+      render json: { message: "Invalid email/password" }, status: :unauthorized
+      return
+    end
     json_response(session, "", :created)
-  end
-
-  def update
-    @session.update!(session_params)
-    json_response(@session, "")
   end
 
   def index
@@ -33,7 +32,7 @@ class SessionsController < ApplicationController
   def session_params
     agent = request.headers["HTTP_USER_AGENT"]
     user_agent = agent.present? ? { user_agent: agent } : {}
-    role = { role: request.headers["REQUEST_PATH"].split("/")[1].singularize }
+    role = { role: request.headers["REQUEST_URI"].split("/")[1].singularize }
     params
       .permit(:email, :password)
       .merge(role)

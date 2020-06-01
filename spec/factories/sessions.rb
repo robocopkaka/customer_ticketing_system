@@ -1,8 +1,21 @@
 FactoryBot.define do
   factory :session do
-    active { false }
-    user_agent { "MyString" }
-    expires_at { "2020-05-26 13:06:49" }
-    deleted_at { "2020-05-26 13:06:49" }
+    for_customer
+
+    user_agent { Faker::Internet.user_agent }
+    # expires_at { Time.current + 24.hours }
+    # deleted_at { nil }
+
+    trait :for_admin do
+      association :session_user, factory: :admin
+    end
+
+    trait :for_customer do
+      association :session_user, factory: :customer
+    end
+
+    trait :for_support_agent do
+      association :session_user, factory: :support_agent
+    end
   end
 end

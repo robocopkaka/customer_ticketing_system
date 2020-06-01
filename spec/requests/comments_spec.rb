@@ -2,15 +2,17 @@ require "rails_helper"
 
 RSpec.describe CommentsController, type: :request do
   let(:support_request) { FactoryBot.create(:support_request) }
-  let(:customer) { FactoryBot.create(:customer) }
-  let(:support_agent) { FactoryBot.create(:support_agent) }
+  let(:customer_session) { create(:session, :for_customer) }
+  let(:customer) { customer_session.session_user }
+  let(:agent_session) { create(:session, :for_support_agent) }
+  let(:support_agent) { agent_session.session_user }
   let(:params) { FactoryBot.attributes_for(:comment) }
   describe "post /support_requests/:support_request_id/comments" do
     describe "customer comments" do
       context "when a support agent has not commented on a request" do
         before do
           post support_request_comments_path(support_request.id),
-               headers: authenticated_headers(customer.id),
+               headers: authenticated_headers(customer_session.id),
                params: params
         end
         it "returns an error if the user tries to comment" do
@@ -24,13 +26,13 @@ RSpec.describe CommentsController, type: :request do
       context "when a support agent has commented on a request" do
         before do
           post support_request_comments_path(support_request.id),
-               headers: authenticated_headers(support_agent.id),
+               headers: authenticated_headers(agent_session.id),
                params: params
         end
         it "allows the user to comment on the request" do
           expect do
             post support_request_comments_path(support_request.id),
-                 headers: authenticated_headers(customer.id),
+                 headers: authenticated_headers(customer_session.id),
                  params: params
           end.to change(support_request.comments, :size).by 1
           comment = json["data"]["comment"]
@@ -45,7 +47,7 @@ RSpec.describe CommentsController, type: :request do
       context "when valid parameters are passed" do
         before do
           post support_request_comments_path(support_request.id),
-               headers: authenticated_headers(support_agent.id),
+               headers: authenticated_headers(agent_session.id),
                params: params
         end
         it "saves the comment" do
@@ -59,7 +61,7 @@ RSpec.describe CommentsController, type: :request do
         before do
           params.delete(:body)
           post support_request_comments_path(support_request.id),
-               headers: authenticated_headers(support_agent.id),
+               headers: authenticated_headers(agent_session.id),
                params: params
         end
         it "returns an error" do
@@ -75,10 +77,10 @@ RSpec.describe CommentsController, type: :request do
     context "when the support request id is valid" do
       before do
         post support_request_comments_path(support_request.id),
-             headers: authenticated_headers(support_agent.id),
+             headers: authenticated_headers(agent_session.id),
              params: params
         get support_request_comments_path(support_request.id),
-            headers: authenticated_headers(support_agent.id)
+            headers: authenticated_headers(agent_session.id)
       end
       it "returns comments for the request" do
         comments = json["data"]["comments"]
@@ -91,15 +93,15 @@ RSpec.describe CommentsController, type: :request do
     context "when user is not logged in" do
       before do
         post support_request_comments_path(support_request.id),
-             headers: authenticated_headers(support_agent.id),
+             headers: authenticated_headers(agent_session.id),
              params: params
       end
 
       it "returns an error" do
         get support_request_comments_path(support_request.id)
         errors = json["errors"].first
-        expect(response).to have_http_status 401
-        expect(errors["user"]).to include "is unauthorized"
+        expect(response).to have_http_status 404
+        expect(errors["messages"]).to eq "Session was not found"
       end
     end
   end

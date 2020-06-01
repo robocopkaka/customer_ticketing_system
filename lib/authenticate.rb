@@ -6,7 +6,8 @@ module Authenticate
 
   def method_missing(method, *args)
     klass = method.to_s.split("_").reject {|val| val == "authenticate" }.join("_")
-    unless klass.camelize.constantize
+    # alternative - use constantize
+    unless klass.in? %w(customer support_agent admin user)
       raise NoMethodError.new("Method #{method} does not exist")
     end
 
@@ -14,7 +15,7 @@ module Authenticate
     when "user"
       authenticate_all
     else
-      authenticate_entity(klass)
+      authenticate_entity(klass.camelize)
     end
   end
 

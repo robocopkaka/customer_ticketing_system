@@ -9,11 +9,11 @@ class SessionSerializer < ActiveModel::Serializer
              :user_agent
 
   def active
-    object.expires_at > Time.current
+    object.expires_at > Time.current && object.deleted_at.nil?
   end
 
   def role
-    object.session_user.class.to_s.capitalize
+    object.session_user.class.to_s.underscore.humanize
   end
 
   def user_id
