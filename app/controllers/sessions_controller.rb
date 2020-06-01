@@ -1,14 +1,12 @@
 class SessionsController < ApplicationController
   skip_after_action :refresh_session, only: %i[create index destroy]
+  before_action :authenticate_user, except: %i[new edit create]
   before_action :find_session, only: %i[update refresh destroy show]
-  # authenticate customer before retrieving index
+  before_action :is_owned_by_user?, only: %i[update show destroy]
+
   def create
     session = SessionService.create(session_params)
     json_response(session, "", :created)
-  end
-
-  def track
-    authenticate_support_agent
   end
 
   def update
@@ -17,7 +15,7 @@ class SessionsController < ApplicationController
   end
 
   def index
-    sessions = Session.active.all
+    sessions = @user.active_sessions
     json_response(sessions, "")
   end
 
@@ -44,5 +42,11 @@ class SessionsController < ApplicationController
 
   def find_session
     @session ||= Session.active.find_by!(uid: params[:id])
+  end
+
+  def is_owned_by_user?
+    unless @session.session_user_id == @user.id
+      render json: { errors: [{user: ["is unauthorized"]}] },status: :unauthorized
+    end
   end
 end

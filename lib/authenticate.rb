@@ -22,16 +22,13 @@ module Authenticate
     session_id = request.headers["HTTP_SESSION_ID"]
     unless instance_variable_defined?("@current_#{klass.underscore}")
       session = Session.active.find_by!(uid: session_id)
-      user = session.session_user
-      # since we're using STI, this ensures that an instance variable
-      # is only set if the session user matches the class from the
-      # authentication call
-      # i.e authenticate_customer should receive session_id with user, cust_....
-      unless user.class.to_s.downcase != klass
-        instance_variable_set(:"@current_#{klass.underscore}", user)
-        return
+      user = User.where(uid: session.session_user_id, type: klass.capitalize).first
+
+      unless user
+        render json: { errors: [{user: ["is unauthorized"]}] },status: :unauthorized
       end
-      render json: { errors: [{user: ["is unauthorized"]}] },status: :unauthorized
+
+      instance_variable_set(:"@current_#{klass.underscore}", user)
     end
   end
 
@@ -40,7 +37,7 @@ module Authenticate
   def authenticate_all
     session_id = request.headers["HTTP_SESSION_ID"]
     unless instance_variable_defined?("@user")
-      session = Session.includes(:session_user).active.find_by!(uid: session_id)
+      session = Session.active.find_by!(uid: session_id)
       user = session.session_user
 
       instance_variable_set(:@user, user)
