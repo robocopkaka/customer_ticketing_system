@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   end
 
   # sessions
-  get '/track', to: "sessions#track"
   resources :sessions, except: %i[create new edit]
   post "admins/login", to: "sessions#create"
   post "customers/login", to: "sessions#create"
