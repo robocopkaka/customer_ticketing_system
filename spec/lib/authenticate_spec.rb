@@ -28,8 +28,7 @@ RSpec.describe Authenticate do
       expect do
         authenticate_kachi
       end
-        .to raise_exception(NoMethodError)
-        .with_message("Method authenticate_kachi does not exist")
+        .to raise_exception(NameError)
     end
   end
 
