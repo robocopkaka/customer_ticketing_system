@@ -43,10 +43,8 @@ RSpec.describe CustomersController do
   describe "/customers/login" do
     let(:params) do
       {
-        auth: {
-          email: customer[:email],
-          password: customer[:password],
-        }
+        email: customer[:email],
+        password: customer[:password]
       }
     end
     before { post customers_path, params: customer }
@@ -54,18 +52,22 @@ RSpec.describe CustomersController do
     context "when valid login details are used" do
       it "logs in the user and returns a token" do
         post customers_login_path, params: params
+        returned_session = json["data"]["session"]
         expect(response).to have_http_status 201
-        expect(json).to have_key "jwt"
+        expect(returned_session["active"]).to be true
+        expect(returned_session["role"]).to eq "Customer"
+        expect(returned_session["expires_at"]).to be > Time.current
       end
     end
 
     context "when invalid login details are used" do
       before do
-        params[:auth][:password] = "random"
+        params[:password] = "random"
         post customers_login_path, params: params
       end
       it "returns an error" do
-        expect(response).to have_http_status 404
+        expect(response).to have_http_status 401
+        expect(json["message"]).to eq "Invalid email/password"
       end
     end
   end

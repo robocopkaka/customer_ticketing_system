@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_10_033101) do
+ActiveRecord::Schema.define(version: 2020_05_26_120649) do
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.text "body"
@@ -19,6 +19,19 @@ ActiveRecord::Schema.define(version: 2020_05_10_033101) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "uid"
+  end
+
+  create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "user_agent"
+    t.datetime "expires_at"
+    t.datetime "deleted_at"
+    t.string "session_user_id"
+    t.string "session_user_type"
+    t.string "uid", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_user_id", "session_user_type"], name: "index_sessions_on_session_user_id_and_session_user_type"
+    t.index ["uid"], name: "index_sessions_on_uid", unique: true
   end
 
   create_table "support_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

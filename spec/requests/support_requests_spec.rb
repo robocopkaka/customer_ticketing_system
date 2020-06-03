@@ -3,8 +3,11 @@ require "rails_helper"
 RSpec.describe SupportRequestsController, type: :request do
   let(:support_request) { FactoryBot.attributes_for(:support_request) }
   let(:created_request) { FactoryBot.create(:support_request) }
-  let(:customer) { FactoryBot.create(:customer) }
-  let(:support_agent) { FactoryBot.create(:support_agent) }
+  let(:agent_session) { create(:session, :for_support_agent) }
+  let(:support_agent) { agent_session.session_user }
+  let(:customer_session) { create(:session, :for_customer) }
+  let(:customer) { customer_session.session_user }
+  let(:admin_session) { create(:session, :for_admin) }
 
   describe "post /support_requests" do
     context "when valid parameters are passed" do
@@ -12,7 +15,7 @@ RSpec.describe SupportRequestsController, type: :request do
         ActionMailer::Base.deliveries.clear
         post support_requests_path,
              params: support_request,
-             headers: authenticated_headers(customer.id)
+             headers: authenticated_headers(customer_session.id)
       end
       it "creates the request" do
         returned_request = json["data"]["support_request"]
@@ -31,8 +34,9 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when customer is not logged in" do
       before { post support_requests_path, params: support_request }
 
-      it "returns an unauthorized error" do
-        expect(response).to have_http_status 401
+      it "returns an not found error" do
+        expect(response).to have_http_status 404
+        expect(json["errors"].first["messages"]).to eq "Session was not found"
       end
     end
 
@@ -41,7 +45,7 @@ RSpec.describe SupportRequestsController, type: :request do
         support_request.delete(:subject)
         post support_requests_path,
              params: support_request,
-             headers: authenticated_headers(customer.id)
+             headers: authenticated_headers(customer_session.id)
       end
       it "returns an error" do
         subject = json["errors"].first["subject"]
@@ -67,7 +71,7 @@ RSpec.describe SupportRequestsController, type: :request do
       it "returns an error" do
         errors = json["errors"].first
         expect(response).to have_http_status 404
-        expect(errors["messages"]).to eq "Resource was not found"
+        expect(errors["messages"]).to eq "Support request was not found"
       end
     end
   end
@@ -77,7 +81,7 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when a valid customer id is passed" do
       before do
         get customer_support_requests_path(customer.id),
-            headers: authenticated_headers(customer.id)
+            headers: authenticated_headers(customer_session.id)
       end
       it "returns the appropriate requests" do
         returned_requests = json["data"]["support_requests"]
@@ -94,7 +98,7 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when a valid support agent id is passed" do
       before do
         get support_agent_support_requests_path(support_agent.id),
-            headers: authenticated_headers(support_agent.id)
+            headers: authenticated_headers(agent_session.id)
       end
       it "returns the appropriate requests" do
         returned_requests = json["data"]["support_requests"]
@@ -113,7 +117,7 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when query string is present" do
       before do
         get support_agent_support_requests_path(support_agent.id),
-            headers: authenticated_headers(support_agent.id),
+            headers: authenticated_headers(agent_session.id),
             params: { query: 'opened' }
       end
 
@@ -130,7 +134,7 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when no query sting is passed" do
       before do
         get support_agent_support_requests_path(support_agent.id),
-            headers: authenticated_headers(support_agent.id)
+            headers: authenticated_headers(agent_session.id)
       end
 
       it "returns all the support requests" do
@@ -143,7 +147,7 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when an invalid query string is passed" do
       before do
         get support_agent_support_requests_path(support_agent.id),
-            headers: authenticated_headers(support_agent.id),
+            headers: authenticated_headers(agent_session.id),
             params: { query: 'weird' }
       end
 
@@ -160,7 +164,7 @@ RSpec.describe SupportRequestsController, type: :request do
       before do
         created_request.update(assignee_id: support_agent.id)
         patch resolve_support_request_path(created_request.id),
-              headers: authenticated_headers(support_agent.id)
+              headers: authenticated_headers(agent_session.id)
       end
 
       it "marks the request as resolved" do
@@ -176,7 +180,7 @@ RSpec.describe SupportRequestsController, type: :request do
     context "when a request is made" do
       before do
         get export_support_requests_path,
-            headers: authenticated_headers(support_agent.id)
+            headers: authenticated_headers(agent_session.id)
       end
       it "calls the worker and returns a response" do
         expect(response).to have_http_status 200
@@ -188,10 +192,11 @@ RSpec.describe SupportRequestsController, type: :request do
   describe "#group_by_priority" do
     let!(:requests) { FactoryBot.create_list(:support_request, 20) }
     let(:admin_id) { FactoryBot.create(:admin).id }
+    let(:session) { create(:session, :for_admin) }
     context "when a request is made to return requests by priorities" do
       before do
         get priorities_support_requests_path,
-            headers: authenticated_headers(admin_id)
+            headers: authenticated_headers(session.id)
       end
       it "returns a hash of grouped requests" do
         expect(response).to have_http_status 200

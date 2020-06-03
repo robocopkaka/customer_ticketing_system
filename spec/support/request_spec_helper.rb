@@ -5,7 +5,6 @@ module RequestSpecHelper
   end
 
   def authenticated_headers(id)
-    token = Knock::AuthToken.new(payload: { sub: id }).token
-    { 'Authorization': "Bearer #{token}" }
+    { HTTP_SESSION_ID: id }
   end
 end

@@ -68,6 +68,9 @@ GEM
     bootsnap (1.4.6)
       msgpack (~> 1.0)
     builder (3.2.4)
+    bullet (6.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (11.1.1)
     case_transform (0.2)
       activesupport
@@ -112,11 +115,6 @@ GEM
       concurrent-ruby (~> 1.0)
     json (2.2.0)
     jsonapi-renderer (0.2.2)
-    jwt (1.5.6)
-    knock (2.1.1)
-      bcrypt (~> 3.1)
-      jwt (~> 1.5)
-      rails (>= 4.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -238,6 +236,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    uniform_notifier (1.13.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
@@ -248,7 +247,9 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
+  bullet
   byebug
   counter_culture (~> 2.0)
   database_cleaner
@@ -256,7 +257,6 @@ DEPENDENCIES
   faker
   guard
   guard-rspec
-  knock
   listen (>= 3.0.5, < 3.2)
   mysql2 (>= 0.4.4)
   pry-rails
