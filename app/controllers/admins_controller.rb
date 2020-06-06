@@ -10,7 +10,10 @@ class AdminsController < ApplicationController
                           request_id: params[:id],
                           assignee_id: params[:assignee_id]
                         )
-    json_response(support_request, "Request assigned successfully")
+    json_response(
+      object: support_request,
+      extra: "Request assigned successfully"
+    )
   end
 
   private

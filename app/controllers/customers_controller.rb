@@ -5,9 +5,12 @@ class CustomersController < ApplicationController
     # using association `create` instead of service here
     customer.sessions.create!(user_agent: request.headers["HTTP_USER_AGENT"])
     json_response(
-      customer,
-      { session_id: customer.sessions.last.id },
-      :created
+      object: customer,
+      extra: {
+        session_id: customer.sessions.last.id,
+        expires_at: customer.sessions.last.expires_at
+      },
+      status: :created
     )
   end
 
