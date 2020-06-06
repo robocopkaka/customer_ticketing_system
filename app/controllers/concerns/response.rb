@@ -1,5 +1,5 @@
 module Response
-  def json_response(object, extra, status=:ok)
+  def json_response(object:nil, extra: nil, status: :ok)
     if object.is_a? Hash
       object.transform_values! do |value|
         ActiveModelSerializers::SerializableResource.new(value).as_json

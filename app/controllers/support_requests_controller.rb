@@ -10,13 +10,18 @@ class SupportRequestsController < ApplicationController
                           customer: @current_customer,
                           request_params: support_request_params
                           ).create
-    json_response(support_request, "Request created successfully", :created)
+    json_response(
+      object: support_request,
+      extra: "Request created successfully",
+      status: :created
+    )
   end
 
   def index
     support_requests = SupportRequestService.fetch_requests(@user, params[:query])
     json_response(
-      support_requests, {
+      object: support_requests,
+      extra: {
       open: @user.open_requests_count,
       closed: @user.resolved_requests_count
     })
@@ -24,23 +29,26 @@ class SupportRequestsController < ApplicationController
 
   def group_by_priority
     requests = SupportRequestService.group_by_priority(@user)
-    json_response(requests, "")
+    json_response(object: requests)
   end
 
   def show
-    json_response(@support_request, "")
+    json_response(object: @support_request)
   end
 
   # consider if support agents can resolve tickets not assigned to
   # them
   def resolve
     @support_request.update(status: 'resolved', resolved_at: Time.now)
-    json_response(@support_request, "")
+    json_response(object: @support_request)
   end
 
   def export_as_csv
     ExportRequestsWorker.perform_async(@current_support_agent.id)
-    json_response({}, "Generated requests have been sent to your mail")
+    json_response(
+      object: {},
+      extra: "Generated requests have been sent to your mail"
+    )
   end
 
   private

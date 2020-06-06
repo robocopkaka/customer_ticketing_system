@@ -8,12 +8,12 @@ class CommentsController < ApplicationController
   def create
     comment = @support_request.comments
                 .create!(comment_params)
-    json_response(comment, "", :created)
+    json_response(object: comment, status: :created)
   end
 
   def index
     comments = @support_request.comments.order_asc
-    json_response(comments, "")
+    json_response(object: comments)
   end
 
   private

@@ -10,21 +10,21 @@ class SessionsController < ApplicationController
       render json: { message: "Invalid email/password" }, status: :unauthorized
       return
     end
-    json_response(session, "", :created)
+    json_response(object: session, status: :created)
   end
 
   def index
     sessions = @user.active_sessions
-    json_response(sessions, "")
+    json_response(object: sessions)
   end
 
   def show
-    json_response(@session, "")
+    json_response(object: @session)
   end
 
   def destroy
     @session.update!(deleted_at: Time.current)
-    json_response(@session, "")
+    json_response(object: @session)
   end
 
   private

@@ -5,14 +5,14 @@ class SupportAgentsController < ApplicationController
     support_agent = SupportAgent.create!(support_agent_params)
     support_agent.sessions.create!(user_agent: request.headers["HTTP_USER_AGENT"])
     json_response(
-      support_agent,
-      { session_id: support_agent.sessions.last.id },
-      :created
+      object: support_agent,
+      extra: { session_id: support_agent.sessions.last.id },
+      status: :created
     )
   end
 
   def index
-    json_response(SupportAgent.all, "")
+    json_response(object: SupportAgent.all)
   end
 
   private
