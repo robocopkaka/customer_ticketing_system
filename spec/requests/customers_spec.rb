@@ -8,10 +8,11 @@ RSpec.describe CustomersController do
       before { post customers_path, params: customer }
 
       it "returns the created customer" do
-        saved_customer = json["data"]["customer"]
+        saved_customer = json["data"]["user"]
         expect(response).to have_http_status 201
         expect(saved_customer["name"]).to eq customer[:name]
         expect(saved_customer["email"]).to eq customer[:email]
+        expect(saved_customer["role"]).to eq "Customer"
         expect(saved_customer["phone_number"]).to eq customer[:phone_number]
       end
     end

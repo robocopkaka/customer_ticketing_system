@@ -15,6 +15,10 @@ class Session < ApplicationRecord
     super(class_name.constantize.base_class.to_s)
   end
 
+  def active?
+    expires_at > Time.current && deleted_at.nil?
+  end
+
   private
 
   def set_uid

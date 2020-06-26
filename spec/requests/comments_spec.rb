@@ -101,7 +101,7 @@ RSpec.describe CommentsController, type: :request do
         get support_request_comments_path(support_request.id)
         errors = json["errors"].first
         expect(response).to have_http_status 404
-        expect(errors["messages"]).to eq "Session was not found"
+        expect(errors["session"]).to eq "was not found"
       end
     end
   end

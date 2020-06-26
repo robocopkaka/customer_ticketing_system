@@ -70,7 +70,7 @@ RSpec.describe AdminsController, type: :request do
       it "returns an error" do
         errors = json["errors"].first
         expect(response).to have_http_status 404
-        expect(errors["messages"]).to eq "Support agent was not found"
+        expect(errors["support_agent"]).to eq "was not found"
       end
     end
   end
