@@ -10,6 +10,7 @@ class CustomersController < ApplicationController
         session_id: customer.sessions.last.id,
         expires_at: customer.sessions.last.expires_at
       },
+      options: { root: "user" },
       status: :created
     )
   end

@@ -14,11 +14,12 @@ RSpec.describe SupportAgentsController do
       end
 
       it "returns the created support_agent" do
-        saved_support_agent = json["data"]["support_agent"]
+        saved_support_agent = json["data"]["user"]
         expect(response).to have_http_status 201
         expect(saved_support_agent["name"]).to eq support_agent[:name]
         expect(saved_support_agent["email"]).to eq support_agent[:email]
         expect(saved_support_agent["phone_number"]).to eq support_agent[:phone_number]
+        expect(saved_support_agent["role"]).to eq "Support Agent"
       end
     end
 
@@ -95,7 +96,7 @@ RSpec.describe SupportAgentsController do
     context "when admin tries to access a list of support agents" do
       before { get support_agents_path, headers: authenticated_headers(admin_session.id) }
       it "returns a list of available support agents" do
-        support_agents = json["data"]["support_agents"]
+        support_agents = json["data"]["users"]
         expect(response).to have_http_status 200
         expect(support_agents.count).to eq 5
         expect(support_agents.first["name"]).to eq agents.first.name

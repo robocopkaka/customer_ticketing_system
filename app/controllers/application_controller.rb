@@ -12,6 +12,6 @@ class ApplicationController < ActionController::API
 
     session ||= Session.active.find_by(uid: session_id)
     return unless session
-    session.update!(expires_at: session.expires_at + 24.hours)
+    session.update!(expires_at: session.expires_at + 1.hour)
   end
 end

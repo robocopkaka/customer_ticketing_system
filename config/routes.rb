@@ -27,4 +27,5 @@ Rails.application.routes.draw do
   post "admins/login", to: "sessions#create"
   post "customers/login", to: "sessions#create"
   post "support_agents/login", to: "sessions#create"
+  get "/fetch_session", to: "sessions#fetch_session"
 end

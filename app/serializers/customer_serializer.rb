@@ -1,7 +1,7 @@
-class CustomerSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :phone_number
+class CustomerSerializer < UserSerializer
+  attributes :role
 
-  def id
-    object.uid
+  def role
+    "Customer"
   end
 end

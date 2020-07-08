@@ -27,6 +27,12 @@ class SessionsController < ApplicationController
     json_response(object: @session)
   end
 
+  # fetch session using session ID in headers
+  def fetch_session
+    session = Session.find_by!(uid: request.headers['HTTP_SESSION_ID'])
+    json_response(object: session)#
+  end
+
   private
 
   def session_params

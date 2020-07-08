@@ -1,7 +1,10 @@
-class SupportAgentSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email, :phone_number
+# frozen_string_literal: true
 
-  def id
-    object.uid
+# SupportAgent Serializer
+class SupportAgentSerializer < UserSerializer
+  attributes :role
+
+  def role
+    "Support Agent"
   end
 end

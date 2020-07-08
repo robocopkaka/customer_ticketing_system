@@ -36,7 +36,7 @@ RSpec.describe SupportRequestsController, type: :request do
 
       it "returns an not found error" do
         expect(response).to have_http_status 404
-        expect(json["errors"].first["messages"]).to eq "Session was not found"
+        expect(json["errors"].first["session"]).to eq "was not found"
       end
     end
 
@@ -71,7 +71,7 @@ RSpec.describe SupportRequestsController, type: :request do
       it "returns an error" do
         errors = json["errors"].first
         expect(response).to have_http_status 404
-        expect(errors["messages"]).to eq "Support request was not found"
+        expect(errors["support_request"]).to eq "was not found"
       end
     end
   end

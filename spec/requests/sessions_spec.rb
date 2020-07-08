@@ -40,7 +40,7 @@ RSpec.describe SessionsController, type: :request do
 
       it "returns an error" do
         expect(response).to have_http_status 404
-        expect(json["errors"].first["messages"]).to eq "Session was not found"
+        expect(json["errors"].first["session"]).to eq "was not found"
       end
     end
   end
@@ -77,7 +77,7 @@ RSpec.describe SessionsController, type: :request do
 
       it "returns an error" do
         expect(response).to have_http_status 404
-        expect(json["errors"].first["messages"]).to eq "Session was not found"
+        expect(json["errors"].first["session"]).to eq "was not found"
       end
     end
   end
@@ -97,6 +97,19 @@ RSpec.describe SessionsController, type: :request do
       customer_ids = json["data"]["sessions"].pluck("user_id").uniq
       expect(customer_ids.count).to eq 1
       expect(customer_ids).to include list_customer.id
+    end
+  end
+
+  describe "#fetch_session" do
+    let!(:list_customer) { create(:customer_with_sessions) }
+    let(:list_session_id) { list_customer.sessions.first.id }
+    context "when request is made" do
+      before do
+        get fetch_session_path, headers: authenticated_headers(list_session_id)
+      end
+      # it "returns the user", focus: true do
+      #   binding.pry
+      # end
     end
   end
 end
