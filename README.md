@@ -1,5 +1,12 @@
 # README
 
+## Description
+> This is an API for a simple customer support system. Customers can make requests that support agents can then attend to.
+> Both customers and support agents can leave comments on a request until it is closed.
+> 
+> Admins assign requests to support agents as they come in and there's a functionality
+> to support exports of support requests.
+
 ## Prerequisites
 
 * Rails - 6.0.2.1
@@ -32,10 +39,3 @@
 * Made use of a worker to export CSVs so that it can be performed asynchronously
 * Mails are sent out to a support agent when a request is assigned to them
 * Mails are sent out to admins when a customer creates a request
-
-
-## Challenges experienced
-* Couldn't find a way to send exported CSVs to the React app so sending the files to the support agents emails
-* Couldn't handle file attachments when creating support requests.
-* Didn't add REGEX for validating phone numbers
-* Couldn't find  a way to delete CSVs after they've been sent to support agents
